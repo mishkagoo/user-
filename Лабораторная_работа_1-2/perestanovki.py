@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 """Лабораторная работа №1-2. Шифры перестановки.
 
-Считает все пять заданий для «Горошко Михаил» (латиницей и кириллицей),
-расшифровывает полученные шифры обратно и печатает таблицы для тетради.
+Считает все пять заданий для «Горошко Михаил» (латиницей и кириллицей;
+задание 4 — только кириллицей), расшифровывает полученные шифры обратно
+и печатает таблицы для тетради.
 
 Запуск:  python3 perestanovki.py
 """
 
 PAD = "_"  # пробел между словами и пустые клетки таблицы
 RU_ALPHABET = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"
-EN_ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 
 def pad(text, n):
@@ -178,7 +178,9 @@ def double_decrypt(cipher, k1, k2):
 
 # ------------------------------------------------------------------- вывод
 
-def solve(title, text, keyword, alphabet):
+def solve(title, text, keyword=None):
+    """keyword — ключ задания 4 (таблица n x n, n = длина ключа).
+    Без ключа задание 4 пропускается: оно делается только по-русски."""
     print("=" * 60)
     print(f"{title}: {text}  ({len(text)} симв.)")
     print("=" * 60)
@@ -217,18 +219,23 @@ def solve(title, text, keyword, alphabet):
     print("Шифр:", " ".join(chunks(c3, 5)), "=", c3)
 
     # 4
-    nums = keyword_numbers(keyword, alphabet)
-    print(f"\nЗадание 4. Вертикальная перестановка 5x5, ключ {keyword} -> "
-          + "".join(map(str, nums)))
-    grid = chunks(pad(text, 25), 5)
-    print("    " + " ".join(keyword))
-    show(grid, nums)
-    order = sorted(range(5), key=lambda c: nums[c])
-    print("  столбцы по порядку номеров:")
-    print("    " + " ".join(keyword[c] for c in order))
-    show([[row[c] for c in order] for row in grid], [1, 2, 3, 4, 5])
-    c4 = vertical_encrypt(text, nums, 5)
-    print("Шифр:", " ".join(chunks(c4, 5)), "=", c4)
+    c4 = None
+    if keyword is None:
+        print("\nЗадание 4 делается только по-русски (см. №2)")
+    else:
+        n = len(keyword)
+        nums = keyword_numbers(keyword, RU_ALPHABET)
+        print(f"\nЗадание 4. Вертикальная перестановка {n}x{n}, ключ {keyword} -> "
+              + "".join(map(str, nums)))
+        grid = chunks(pad(text, n * n), n)
+        print("    " + " ".join(keyword))
+        show(grid, nums)
+        order = sorted(range(n), key=lambda c: nums[c])
+        print("  столбцы по порядку номеров:")
+        print("    " + " ".join(keyword[c] for c in order))
+        show([[row[c] for c in order] for row in grid], range(1, n + 1))
+        c4 = vertical_encrypt(text, nums, n)
+        print("Шифр:", " ".join(chunks(c4, n)), "=", c4)
 
     # 5
     k1 = [1, 4, 6, 5, 3, 2]
@@ -249,9 +256,10 @@ def solve(title, text, keyword, alphabet):
         ("1", simple_decrypt(c1, 3, 3)),
         ("2", block_decrypt(c2, key2)),
         ("3", route_decrypt(c3, 5, 5)),
-        ("4", vertical_decrypt(c4, nums, 5)),
         ("5", double_decrypt(c5, k1, k2)),
     ]
+    if c4 is not None:
+        checks.insert(3, ("4", vertical_decrypt(c4, nums, n)))
     print("\nРасшифровка:")
     for n, plain in checks:
         ok = plain.rstrip(PAD) == text
@@ -261,6 +269,6 @@ def solve(title, text, keyword, alphabet):
 
 
 if __name__ == "__main__":
-    solve("№1 латиницей", "GOROSHKO_MIKHAIL", "VENIK", EN_ALPHABET)
+    solve("№1 латиницей", "GOROSHKO_MIKHAIL")
     print()
-    solve("№2 кириллицей", "ГОРОШКО_МИХАИЛ", "ВЕНИК", RU_ALPHABET)
+    solve("№2 кириллицей", "ГОРОШКО_МИХАИЛ", "ЛИВЕНЬ")
