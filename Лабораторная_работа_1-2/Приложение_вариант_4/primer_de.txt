@@ -1,0 +1,5 @@
+Die Kryptographie beschäftigt sich mit der Verschlüsselung von Nachrichten. Schon die Spartaner benutzten die Skytale: Man wickelte einen Lederstreifen um einen Holzstab und schrieb den Text in Längsrichtung darauf. Ohne einen Stab mit genau demselben Durchmesser konnte niemand die Nachricht lesen. Das ist ein frühes Beispiel für eine Transposition, denn die Buchstaben bleiben unverändert, nur ihre Reihenfolge ändert sich.
+
+Bei der Routentransposition schreibt man den Klartext in eine Tabelle und liest ihn auf einem anderen Weg wieder aus, zum Beispiel in Schlangenlinien. Die Größe der Tabelle bildet zusammen mit dem Weg den Schlüssel. Bei der mehrfachen Transposition werden erst die Spalten und danach die Zeilen nach zwei Schlüsselwörtern vertauscht.
+
+Weil sich die Häufigkeit der einzelnen Buchstaben dabei nicht verändert, erkennt ein Angreifer sofort, dass es sich um eine Transposition handelt. Große Tabellen und mehrere Vertauschungen hintereinander machen das Entschlüsseln ohne Schlüssel aber deutlich schwieriger.

@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Шифры перестановки</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=PT+Mono&family=PT+Sans:wght@400;700&display=swap">
+<style>
+/* Layout: конвейер «текст → шифр → результат» в три колонки (на узком экране — одна),
+   под ним таблица текущего блока «в клетку» и частоты букв на всю ширину. */
+:root {
+  --paper: #f3f5f9;
+  --sheet: #ffffff;
+  --ink: #16203a;
+  --ink-2: #4a5570;
+  --muted: #6f7a92;
+  --rule: #dbe1ec;
+  --cell: #c6d4ee;
+  --pen: #1f46b4;
+  --pen-soft: #e6ecfa;
+  --on-pen: #ffffff;
+  --margin: #cf3a64;
+  --ok: #16703a;
+  --ok-soft: #e2f2e7;
+  --warn: #8f5600;
+  --warn-soft: #fbefd8;
+  --err: #b3302a;
+  --err-soft: #fbe5e3;
+  --series-1: #2a78d6;
+  --hairline: #e3e8f1;
+  --wash: rgba(31, 70, 180, 0.08);
+  --shadow: rgba(16, 28, 64, 0.14);
+  --font-ui: "PT Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-mono: "PT Mono", ui-monospace, "Cascadia Mono", Consolas, "Liberation Mono", monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0d1220;
+    --sheet: #141a2b;
+    --ink: #e5e9f3;
+    --ink-2: #b0b9cd;
+    --muted: #8a94ab;
+    --rule: #2a3352;
+    --cell: #2f3e64;
+    --pen: #8ba6ff;
+    --pen-soft: #1b2546;
+    --on-pen: #0d1220;
+    --margin: #ff7b9b;
+    --ok: #52c482;
+    --ok-soft: #11301f;
+    --warn: #f1b552;
+    --warn-soft: #34270e;
+    --err: #ff8b82;
+    --err-soft: #3b1714;
+    --series-1: #3987e5;
+    --hairline: #232c45;
+    --wash: rgba(139, 166, 255, 0.12);
+    --shadow: rgba(0, 0, 0, 0.45);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0d1220;
+  --sheet: #141a2b;
+  --ink: #e5e9f3;
+  --ink-2: #b0b9cd;
+  --muted: #8a94ab;
+  --rule: #2a3352;
+  --cell: #2f3e64;
+  --pen: #8ba6ff;
+  --pen-soft: #1b2546;
+  --on-pen: #0d1220;
+  --margin: #ff7b9b;
+  --ok: #52c482;
+  --ok-soft: #11301f;
+  --warn: #f1b552;
+  --warn-soft: #34270e;
+  --err: #ff8b82;
+  --err-soft: #3b1714;
+  --series-1: #3987e5;
+  --hairline: #232c45;
+  --wash: rgba(139, 166, 255, 0.12);
+  --shadow: rgba(0, 0, 0, 0.45);
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.5 var(--font-ui); }
+button, input, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--pen); outline-offset: 2px; }
+
+.page { max-width: 1320px; margin: 0 auto; padding-inline: 16px; padding-block: 20px 40px; display: grid; gap: 16px; }
+@media (min-width: 720px) { .page { padding-inline: 24px; padding-block: 28px 48px; } }
+
+/* шапка */
+.masthead { display: grid; gap: 6px; }
+.eyebrow { margin: 0; font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+h1 { margin: 0; font-size: clamp(30px, 4.4vw, 42px); line-height: 1.08; letter-spacing: -0.01em; text-wrap: balance; }
+.lede { margin: 0; max-width: 66ch; color: var(--ink-2); }
+.alphabet { margin: 4px 0 0; display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 9px; font: 15px/1.6 var(--font-mono); color: var(--ink-2); }
+.alphabet .label { font: 700 12px/1 var(--font-ui); letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); margin-right: 4px; }
+.alphabet .extra { color: var(--pen); font-weight: 700; }
+
+/* рабочая область */
+.workbench { display: grid; gap: 16px; grid-template-columns: minmax(0, 1fr); align-items: start; }
+@media (min-width: 1100px) { .workbench { grid-template-columns: minmax(0, 1fr) 312px minmax(0, 1fr); } }
+.panel { background: var(--sheet); border: 1px solid var(--rule); border-radius: 8px; padding: 16px; display: grid; gap: 12px; min-width: 0; }
+.panel-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px; }
+h2 { margin: 0; font-size: 19px; line-height: 1.25; text-wrap: balance; }
+.tools { display: flex; flex-wrap: wrap; gap: 6px; }
+textarea {
+  display: block; width: 100%; min-height: 280px; resize: vertical; padding: 12px 14px;
+  font: 15px/1.6 var(--font-mono); color: var(--ink); background: var(--sheet);
+  border: 1px solid var(--rule); border-radius: 6px;
+}
+textarea[readonly] { background: var(--paper); }
+.meta { margin: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; font-size: 14px; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.note { margin: 0; font-size: 14px; color: var(--ink-2); }
+
+/* кнопки */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  min-height: 36px; padding: 7px 12px; border-radius: 6px; border: 1px solid transparent;
+  font: 700 14px/1.2 var(--font-ui); cursor: pointer; text-align: center;
+}
+.btn.primary { background: var(--pen); color: var(--on-pen); }
+.btn.secondary { background: var(--pen-soft); color: var(--pen); border-color: var(--pen); }
+.btn.ghost { background: transparent; color: var(--ink-2); border-color: var(--rule); font-weight: 400; }
+.btn.ghost:hover:not(:disabled) { background: var(--pen-soft); color: var(--ink); }
+.btn.primary:hover:not(:disabled) { filter: brightness(1.1); }
+.btn.secondary:hover:not(:disabled) { background: var(--sheet); }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.btn.icon { width: 36px; padding: 0; font-size: 18px; }
+
+/* выбор шифра */
+.options { display: grid; gap: 8px; margin: 0; padding: 0; border: 0; min-width: 0; }
+.options legend { padding: 0; margin-bottom: 8px; font-size: 13px; font-weight: 700; color: var(--ink-2); }
+.option {
+  display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 1px 10px; padding: 10px 12px;
+  border: 1px solid var(--rule); border-radius: 6px; cursor: pointer;
+}
+.option input { grid-row: span 2; margin: 4px 0 0; accent-color: var(--pen); }
+.option b { font-size: 15px; line-height: 1.3; }
+.option span { font-size: 13px; color: var(--muted); line-height: 1.35; }
+.option:has(input:checked) { border-color: var(--pen); background: var(--pen-soft); }
+.params { display: grid; gap: 10px; }
+.fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.field { display: grid; gap: 4px; min-width: 0; }
+.field label { font-size: 13px; font-weight: 700; color: var(--ink-2); }
+.field input {
+  width: 100%; padding: 8px 10px; font: 16px var(--font-mono); color: var(--ink);
+  background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px;
+}
+.field input:disabled { background: var(--paper); color: var(--muted); }
+.field output { min-height: 1.4em; font: 13px/1.4 var(--font-mono); color: var(--pen); overflow-wrap: anywhere; }
+.check { display: flex; align-items: flex-start; gap: 8px; font-size: 14px; line-height: 1.35; color: var(--ink-2); cursor: pointer; }
+.check input { margin: 2px 0 0; accent-color: var(--pen); }
+.rule { margin: 0; font-size: 13.5px; line-height: 1.45; color: var(--ink-2); }
+.size { margin: 0; font-size: 14px; line-height: 1.4; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.error { margin: 0; padding: 8px 10px; border-radius: 6px; font-size: 14px; color: var(--err); background: var(--err-soft); }
+.actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.actions .btn { min-height: 46px; font-size: 15px; }
+
+/* результат */
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(128px, 1fr)); gap: 12px 16px; margin: 0; }
+.stats div { display: grid; gap: 2px; align-content: start; min-width: 0; }
+.stats dt { font-size: 12px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); }
+.stats dd { margin: 0; font: 16px/1.4 var(--font-mono); font-variant-numeric: tabular-nums; }
+.foot { margin: 0; font-size: 12.5px; color: var(--muted); }
+.chip { display: inline-flex; align-items: center; gap: 4px; padding: 3px 9px; border-radius: 999px; font: 700 13px/1.3 var(--font-ui); }
+.chip.ok { color: var(--ok); background: var(--ok-soft); }
+.chip.warn { color: var(--warn); background: var(--warn-soft); }
+.toast { margin: 0; min-height: 1.4em; font-size: 14px; color: var(--ok); }
+
+/* таблица блока */
+.pager { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.grids { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 20px 32px; min-width: 0; }
+.grid-fig { margin: 0; display: grid; gap: 6px; min-width: 0; max-width: 100%; }
+.grid-fig figcaption { font-size: 13px; font-weight: 700; color: var(--ink-2); }
+.grid-fig .more { font-size: 12.5px; color: var(--muted); }
+.grid-scroll { overflow-x: auto; max-width: 100%; padding-bottom: 2px; }
+table.grid { border-collapse: collapse; font-family: var(--font-mono); }
+table.grid td {
+  position: relative; width: 30px; min-width: 30px; height: 30px; padding: 0;
+  border: 1px solid var(--cell); text-align: center; vertical-align: middle;
+  font-size: 16px; color: var(--pen);
+}
+table.grid td.soft { color: var(--muted); }
+table.grid td .no { position: absolute; top: 1px; left: 2px; font-size: 9px; line-height: 1; color: var(--muted); }
+table.grid td.start .no { color: var(--margin); font-weight: 700; }
+table.grid th { height: 22px; padding: 0 4px; font-size: 13px; font-weight: 400; color: var(--muted); text-align: center; }
+table.grid th.key { color: var(--ink); font-weight: 700; }
+table.grid th.num { color: var(--pen); font-weight: 700; }
+table.grid th.arrow { color: var(--ink-2); font-size: 15px; }
+.flow { display: grid; gap: 6px; margin: 0; }
+.flow div { display: grid; gap: 2px; min-width: 0; }
+.flow .label { font-size: 12.5px; color: var(--muted); }
+.flow code { font: 14px/1.6 var(--font-mono); color: var(--ink); overflow-wrap: anywhere; }
+.flow code .soft { color: var(--muted); }
+
+/* частоты */
+.charts { position: relative; display: grid; gap: 16px; min-width: 0; }
+.chart { margin: 0; display: grid; gap: 4px; min-width: 0; }
+.chart figcaption { font-size: 13px; font-weight: 700; color: var(--ink-2); }
+.chart svg { display: block; max-width: 100%; touch-action: pan-y; border-radius: 4px; }
+.chart svg .bar { fill: var(--series-1); }
+.chart svg .gl { stroke: var(--hairline); stroke-width: 1; }
+.chart svg .axis { stroke: var(--rule); stroke-width: 1; }
+.chart svg .yl { fill: var(--muted); font: 11px var(--font-mono); text-anchor: end; }
+.chart svg .xl { fill: var(--ink-2); font: 11px var(--font-mono); text-anchor: middle; }
+.chart svg .xl.on { fill: var(--ink); font-weight: 700; }
+.chart svg .wash { fill: var(--wash); }
+.chart svg .hit { fill: transparent; }
+.tooltip {
+  position: absolute; z-index: 2; pointer-events: none; display: grid; gap: 3px; min-width: 168px;
+  padding: 8px 10px; border-radius: 6px; border: 1px solid var(--rule);
+  background: var(--sheet); box-shadow: 0 6px 18px var(--shadow); font-size: 13px;
+}
+.tooltip .letter { font: 700 18px/1.1 var(--font-mono); }
+.tooltip .row { display: flex; align-items: baseline; gap: 8px; }
+.tooltip .row b { font: 700 14px var(--font-mono); font-variant-numeric: tabular-nums; }
+.tooltip .row span { color: var(--muted); }
+details.freq-table summary { cursor: pointer; width: fit-content; font-size: 14px; font-weight: 700; color: var(--ink-2); }
+details.freq-table[open] summary { margin-bottom: 8px; }
+.table-wrap { overflow-x: auto; }
+table.freq { border-collapse: collapse; min-width: 320px; font-size: 14px; font-variant-numeric: tabular-nums; }
+table.freq th, table.freq td { padding: 4px 14px 4px 0; border-bottom: 1px solid var(--hairline); text-align: right; }
+table.freq th { font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); }
+table.freq th:first-child, table.freq td:first-child { text-align: left; }
+table.freq td:first-child { font-family: var(--font-mono); font-weight: 700; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .btn, .option { transition: background-color 0.15s ease, border-color 0.15s ease, filter 0.15s ease; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="masthead">
+    <p class="eyebrow">Лабораторная работа · вариант 4 · Горошко Михаил</p>
+    <h1>Шифры перестановки</h1>
+    <p class="lede">Зашифрование и расшифрование текстов на немецком языке двумя способами: маршрутной перестановкой «змейкой» и множественной перестановкой, где ключевые слова — имя и фамилия.</p>
+    <p class="alphabet" id="alphabet"></p>
+  </header>
+
+  <main class="workbench">
+    <section class="panel" aria-labelledby="source-title">
+      <div class="panel-head">
+        <h2 id="source-title">Исходный текст</h2>
+        <div class="tools">
+          <button class="btn ghost" id="open-btn" type="button">Открыть .txt</button>
+          <button class="btn ghost" id="sample-btn" type="button">Пример</button>
+          <button class="btn ghost" id="clear-btn" type="button">Очистить</button>
+        </div>
+        <input type="file" id="file-input" accept=".txt,text/plain" hidden>
+      </div>
+      <textarea id="source" spellcheck="false" aria-labelledby="source-title" aria-describedby="source-meta"></textarea>
+      <p class="meta" id="source-meta"></p>
+      <p class="note" id="source-note" hidden></p>
+    </section>
+
+    <section class="panel" aria-labelledby="method-title">
+      <h2 id="method-title">Шифр</h2>
+      <fieldset class="options">
+        <legend>Способ</legend>
+        <label class="option" for="m-route">
+          <input type="radio" name="method" id="m-route" value="route" checked>
+          <b>Маршрутная перестановка</b>
+          <span>маршрут змейкой, размер таблицы задаёт преподаватель</span>
+        </label>
+        <label class="option" for="m-multi">
+          <input type="radio" name="method" id="m-multi" value="multi">
+          <b>Множественная перестановка</b>
+          <span>ключевые слова — имя и фамилия</span>
+        </label>
+      </fieldset>
+
+      <div class="params" id="route-params">
+        <div class="fields">
+          <div class="field">
+            <label for="rows">Строк</label>
+            <input id="rows" type="number" inputmode="numeric" min="1" max="100" step="1" value="5">
+          </div>
+          <div class="field">
+            <label for="cols">Столбцов</label>
+            <input id="cols" type="number" inputmode="numeric" min="1" max="100" step="1" value="5">
+          </div>
+        </div>
+        <label class="check" for="auto-rows">
+          <input type="checkbox" id="auto-rows">
+          Весь текст в одной таблице, число строк считается по длине текста
+        </label>
+        <p class="rule">Текст режется на блоки размером с таблицу. Блок вписывается змейкой по строкам (→ ← → …), а выписывается змейкой по столбцам, начиная с правого верхнего угла (↓ ↑ ↓ …).</p>
+      </div>
+
+      <div class="params" id="multi-params" hidden>
+        <div class="field">
+          <label for="key-cols">Ключ столбцов — имя</label>
+          <input id="key-cols" value="MICHAIL" autocomplete="off" autocapitalize="characters" spellcheck="false">
+          <output id="key-cols-order" for="key-cols"></output>
+        </div>
+        <div class="field">
+          <label for="key-rows">Ключ строк — фамилия</label>
+          <input id="key-rows" value="GOROSCHKO" autocomplete="off" autocapitalize="characters" spellcheck="false">
+          <output id="key-rows-order" for="key-rows"></output>
+        </div>
+        <p class="rule">Буквы ключей нумеруются по немецкому алфавиту, одинаковые — слева направо. Над столбцами пишется имя, слева от строк — фамилия. Сначала столбцы, потом строки ставятся по возрастанию номеров, блок читается по строкам. По-немецки Михаил Горошко пишется Michail Goroschko. Ключ можно задать и цифрами, например 15243.</p>
+      </div>
+
+      <p class="size" id="block-size"></p>
+      <p class="error" id="param-error" role="alert" hidden></p>
+      <div class="actions">
+        <button class="btn primary" id="encrypt-btn" type="button">Зашифровать</button>
+        <button class="btn secondary" id="decrypt-btn" type="button">Расшифровать</button>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="result-title">
+      <div class="panel-head">
+        <h2 id="result-title">Результат</h2>
+        <div class="tools">
+          <button class="btn ghost" id="use-btn" type="button">В исходный текст</button>
+          <button class="btn ghost" id="copy-btn" type="button">Копировать</button>
+          <button class="btn ghost" id="save-btn" type="button">Сохранить .txt</button>
+        </div>
+      </div>
+      <textarea id="result" readonly spellcheck="false" aria-labelledby="result-title"></textarea>
+      <p class="error" id="result-error" role="alert" hidden></p>
+      <dl class="stats">
+        <div><dt>Блоков</dt><dd id="st-blocks">—</dd></div>
+        <div><dt>Зашифрование</dt><dd id="st-enc">—</dd></div>
+        <div><dt>Расшифрование</dt><dd id="st-dec">—</dd></div>
+        <div><dt>Проверка</dt><dd id="st-check">—</dd></div>
+      </dl>
+      <p class="foot">Время — среднее по многократному запуску операции в браузере.</p>
+      <p class="toast" id="toast" role="status" aria-live="polite"></p>
+    </section>
+  </main>
+
+  <section class="panel" aria-labelledby="block-title">
+    <div class="panel-head">
+      <h2 id="block-title">Как переставляется блок</h2>
+      <div class="pager">
+        <button class="btn ghost icon" id="prev-block" type="button" aria-label="Предыдущий блок">‹</button>
+        <span id="block-label" aria-live="polite"></span>
+        <button class="btn ghost icon" id="next-block" type="button" aria-label="Следующий блок">›</button>
+      </div>
+    </div>
+    <div class="grids" id="grids"></div>
+    <div class="flow" id="block-flow"></div>
+  </section>
+
+  <section class="panel" aria-labelledby="freq-title">
+    <div class="panel-head">
+      <h2 id="freq-title">Частоты букв</h2>
+    </div>
+    <p class="meta" id="freq-summary"></p>
+    <div class="charts" id="charts">
+      <figure class="chart">
+        <figcaption id="cap-in">Открытый текст</figcaption>
+        <svg id="chart-in" tabindex="0" role="img" aria-labelledby="cap-in"></svg>
+      </figure>
+      <figure class="chart">
+        <figcaption id="cap-out">Шифртекст</figcaption>
+        <svg id="chart-out" tabindex="0" role="img" aria-labelledby="cap-out"></svg>
+      </figure>
+      <div class="tooltip" id="tooltip" hidden></div>
+    </div>
+    <details class="freq-table">
+      <summary>Таблица частот</summary>
+      <div class="table-wrap">
+        <table class="freq">
+          <thead><tr><th>Буква</th><th id="th-in">Открытый текст</th><th id="th-out">Шифртекст</th><th>Доля</th></tr></thead>
+          <tbody id="freq-body"></tbody>
+        </table>
+      </div>
+    </details>
+  </section>
+</div>
+<script src="ciphers.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
