@@ -238,18 +238,20 @@ def solve(title, text, keyword=None):
         print("Шифр:", " ".join(chunks(c4, n)), "=", c4)
 
     # 5
-    k1 = [1, 4, 6, 5, 3, 2]
-    k2 = [3, 5, 6, 4, 1, 2]
-    print("\nЗадание 5. Двойная перестановка 6x6, k1=146532, k2=356412")
+    k1 = [1, 5, 2, 4, 3]
+    k2 = [3, 2, 1, 5, 4]
+    m = len(k1)
+    print(f"\nЗадание 5. Двойная перестановка {m}x{m}, "
+          f"k1={''.join(map(str, k1))}, k2={''.join(map(str, k2))}")
     src, by_cols, by_rows = double_steps(text, k1, k2)
     print("  исходная:")
     show(src, k1, k2)
     print("  переставили столбцы:")
-    show(by_cols, [1, 2, 3, 4, 5, 6], k2)
+    show(by_cols, range(1, m + 1), k2)
     print("  переставили строки:")
-    show(by_rows, [1, 2, 3, 4, 5, 6], [1, 2, 3, 4, 5, 6])
+    show(by_rows, range(1, m + 1), range(1, m + 1))
     c5 = double_encrypt(text, k1, k2)
-    print("Шифр:", " ".join(chunks(c5, 6)), "=", c5)
+    print("Шифр:", " ".join(chunks(c5, m)), "=", c5)
 
     # проверка расшифрования
     checks = [
