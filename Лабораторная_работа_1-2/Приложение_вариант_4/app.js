@@ -559,7 +559,7 @@ Weil sich die Häufigkeit der einzelnen Buchstaben dabei nicht verändert, erken
     if (!file) return;
     try {
       let text = await readFile(file, "utf-8");
-      if (text.includes("�")) text = await readFile(file, "windows-1252"); // старые файлы Windows
+      if (text.includes("\uFFFD")) text = await readFile(file, "windows-1252"); // старые файлы Windows
       ui.source.value = text.replace(/\r\n?/g, "\n");
       sourceName = file.name;
       clearError();
