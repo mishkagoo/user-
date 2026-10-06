@@ -1,0 +1,5 @@
+Bei einer Substitution wird jeder Buchstabe des Klartextes durch einen anderen Buchstaben ersetzt. Das bekannteste Beispiel ist die Caesar-Verschlüsselung: Julius Caesar verschob jeden Buchstaben seiner Briefe um drei Stellen im Alphabet. Aus einem A wurde ein D, aus einem B ein E. Weil es nur so viele Schlüssel wie Buchstaben gibt, kann man eine solche Nachricht durch einfaches Ausprobieren aller Verschiebungen knacken.
+
+Sicherer ist die Playfair-Verschlüsselung, die Charles Wheatstone im Jahr 1854 erfand. Sie ersetzt nicht einzelne Buchstaben, sondern Buchstabenpaare. Dazu schreibt man ein Schlüsselwort ohne doppelte Buchstaben in eine Tabelle und füllt sie mit den übrigen Buchstaben des Alphabets auf. Für das deutsche Alphabet mit Ä, Ö, Ü und ß passt eine Tabelle mit fünf Zeilen und sechs Spalten genau.
+
+Trotzdem lassen sich beide Verfahren mit einer Häufigkeitsanalyse angreifen: Bei Caesar zählt man einzelne Buchstaben, bei Playfair die Buchstabenpaare. Im Deutschen ist das E mit Abstand der häufigste Buchstabe.
