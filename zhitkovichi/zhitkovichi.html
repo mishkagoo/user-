@@ -1,0 +1,477 @@
+<title>Житковичи, Беларусь</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800&family=Golos+Text:wght@400;500;600;700&family=PT+Mono&display=swap">
+<style>
+/* Layout: a folded two-page travel brochure on a Polesie water ground, framed by a red
+   vyshyvanka-style border; the left page is history, the right page is today. */
+:root {
+  --ground: #e6eff0;      /* pale marsh water */
+  --page: #f7fbfb;        /* paper */
+  --ink: #12343b;         /* deep river teal */
+  --muted: #4b6a70;
+  --reed: #3f7d5a;        /* reed green */
+  --water: #7fb3c1;
+  --water-soft: #cfe3e8;
+  --heraldic: #b3262e;    /* red field of the coat of arms */
+  --silver: #ffffff;
+  --line: #c3d7db;
+  --sand: #e9dfc5;
+  --font-display: "Unbounded", "Arial Black", system-ui, sans-serif;
+  --font-body: "Golos Text", "Segoe UI", system-ui, sans-serif;
+  --font-data: "PT Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ground: #0b1a1d; --page: #10262a; --ink: #e3f0f1; --muted: #9fbcc1;
+    --reed: #79c196; --water: #4f8c9c; --water-soft: #1b3a41; --heraldic: #e0525a;
+    --silver: #f2f6f7; --line: #2a4a50; --sand: #3a3626; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --ground: #0b1a1d; --page: #10262a; --ink: #e3f0f1; --muted: #9fbcc1;
+  --reed: #79c196; --water: #4f8c9c; --water-soft: #1b3a41; --heraldic: #e0525a;
+  --silver: #f2f6f7; --line: #2a4a50; --sand: #3a3626; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--ground); color: var(--ink);
+  font-family: var(--font-body); font-size: 15px; line-height: 1.5;
+}
+.wrap {
+  max-width: 1280px; margin: 0 auto;
+  padding-block: 28px 40px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+h1, h2, h3 { text-wrap: balance; margin: 0; }
+p { margin: 0; }
+
+/* vyshyvanka border: repeating red diamonds */
+.ornament {
+  height: 14px;
+  background:
+    linear-gradient(135deg, transparent 35%, var(--heraldic) 35% 65%, transparent 65%) 0 0 / 14px 14px,
+    linear-gradient(45deg, transparent 35%, var(--heraldic) 35% 65%, transparent 65%) 0 0 / 14px 14px;
+  opacity: .85;
+}
+
+.spread {
+  display: grid; grid-template-columns: 1fr 1fr;
+  background: var(--page);
+  border: 1px solid var(--line);
+  border-radius: 6px; overflow: hidden;
+  box-shadow: 0 18px 40px -24px rgba(10, 40, 48, .45);
+}
+.page { padding: 26px 30px 30px; display: flex; flex-direction: column; gap: 22px; min-width: 0; }
+.page + .page { border-left: 2px dashed var(--line); }
+
+.ribbon {
+  display: inline-block; align-self: flex-start;
+  font-family: var(--font-data); font-size: 12px; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--page); background: var(--ink); padding: 5px 12px; border-radius: 2px;
+}
+
+/* masthead */
+.mast { display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: center; }
+.mast svg.arms { width: 78px; height: auto; }
+.mast h1 {
+  font-family: var(--font-display); font-weight: 800; font-size: clamp(28px, 4.2vw, 46px);
+  line-height: 1; letter-spacing: -.01em; text-transform: uppercase;
+}
+.mast .be { font-family: var(--font-data); color: var(--muted); font-size: 13px; margin-top: 8px; letter-spacing: .04em; }
+.lead { font-size: 16.5px; max-width: 60ch; }
+.lead b { color: var(--heraldic); font-weight: 600; }
+
+.facts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.fact { border-top: 3px solid var(--water); padding-top: 8px; }
+.fact .n { font-family: var(--font-display); font-weight: 600; font-size: 22px; font-variant-numeric: tabular-nums; }
+.fact .l { font-size: 12.5px; color: var(--muted); line-height: 1.35; }
+
+.sec-title {
+  font-family: var(--font-display); font-weight: 800; font-size: 19px; text-transform: uppercase;
+  letter-spacing: .01em; display: flex; align-items: center; gap: 10px;
+}
+.sec-title::after { content: ""; flex: 1; height: 2px; background: var(--line); }
+
+/* sights grid */
+.sights { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 20px; }
+.sight { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.sight .pic {
+  background: var(--water-soft); border-radius: 4px; aspect-ratio: 16 / 10; max-width: 100%;
+  display: grid; place-items: center; overflow: hidden;
+}
+.sight .pic svg { width: 100%; height: 100%; display: block; }
+.sight h3 { font-size: 15px; font-weight: 700; line-height: 1.3; }
+.sight h3 .yr { font-family: var(--font-data); font-weight: 400; color: var(--heraldic); font-size: 13px; }
+.sight p { font-size: 13.5px; color: var(--muted); }
+.sight.lost .pic { filter: grayscale(.85); }
+.tag {
+  display: inline-block; font-family: var(--font-data); font-size: 11px; text-transform: uppercase; letter-spacing: .08em;
+  padding: 2px 6px; border: 1px solid var(--heraldic); color: var(--heraldic); border-radius: 2px; margin-left: 4px;
+  vertical-align: 2px;
+}
+
+/* timeline */
+.timeline ol {
+  list-style: none; margin: 0; padding: 0; display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 22px 12px;
+}
+.timeline li {
+  position: relative; font-size: 12.5px; line-height: 1.35; color: var(--muted);
+  border-top: 2px solid var(--water); padding-top: 12px;
+}
+.timeline li::before {
+  content: ""; position: absolute; top: -7px; left: 0; width: 8px; height: 8px; border-radius: 50%;
+  background: var(--page); border: 2px solid var(--heraldic);
+}
+.timeline b { display: block; font-family: var(--font-data); color: var(--ink); font-size: 14px; font-weight: 400; }
+
+/* right page */
+.right-head h2 { font-family: var(--font-display); font-weight: 800; font-size: clamp(20px, 2.4vw, 26px); text-transform: uppercase; line-height: 1.15; }
+.right-head p { color: var(--muted); margin-top: 6px; }
+
+.plants { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+.plant { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 8px; min-width: 0; }
+.plant svg { width: 64px; height: 64px; }
+.plant .nm { font-size: 12.5px; font-weight: 600; line-height: 1.25; hyphens: auto; overflow-wrap: anywhere; }
+.plant .ds { font-size: 12px; color: var(--muted); line-height: 1.3; }
+
+.row2 { display: grid; grid-template-columns: 1.15fr 1fr; gap: 20px; align-items: start; }
+.panel { background: var(--water-soft); border-radius: 4px; padding: 14px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.panel svg { width: 100%; height: auto; display: block; }
+.panel h3 { font-family: var(--font-display); font-weight: 600; font-size: 15px; text-transform: uppercase; }
+.panel p { font-size: 13.5px; color: var(--muted); }
+.cap { font-family: var(--font-data); font-size: 11px; color: var(--muted); letter-spacing: .04em; }
+
+.memorials { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px 14px; margin: 0; padding: 0; list-style: none; }
+.memorials li { font-size: 13.5px; padding-left: 14px; position: relative; }
+.memorials li::before { content: ""; position: absolute; left: 0; top: .55em; width: 6px; height: 6px; background: var(--heraldic); transform: rotate(45deg); }
+
+.nature { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.nat { display: flex; flex-direction: column; gap: 6px; min-width: 0; border-left: 3px solid var(--reed); padding-left: 10px; }
+.nat h3 { font-size: 14.5px; font-weight: 700; }
+.nat p { font-size: 13px; color: var(--muted); }
+
+.foot {
+  margin-top: 6px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 20px;
+  font-size: 12px; color: var(--muted);
+}
+.foot a { color: inherit; }
+.foot a:focus-visible { outline: 2px solid var(--heraldic); outline-offset: 2px; }
+.visit {
+  text-align: center; font-family: var(--font-display); font-weight: 600; letter-spacing: .2em;
+  text-transform: uppercase; font-size: 13px; color: var(--page); background: var(--ink); padding: 8px;
+}
+
+/* svg tokens */
+.s-ink { fill: var(--ink); } .s-page { fill: var(--page); } .s-water { fill: var(--water); }
+.s-reed { fill: var(--reed); } .s-red { fill: var(--heraldic); } .s-silver { fill: var(--silver); }
+.s-sand { fill: var(--sand); } .s-soft { fill: var(--water-soft); } .s-muted { fill: var(--muted); }
+.st-ink { stroke: var(--ink); fill: none; } .st-water { stroke: var(--water); fill: none; }
+.st-red { stroke: var(--heraldic); fill: none; } .st-reed { stroke: var(--reed); fill: none; }
+.t-ink { fill: var(--ink); font-family: var(--font-data); } .t-muted { fill: var(--muted); font-family: var(--font-data); }
+
+@media (max-width: 980px) {
+  .spread { grid-template-columns: 1fr; }
+  .page + .page { border-left: 0; border-top: 2px dashed var(--line); }
+}
+@media (max-width: 620px) {
+  .page { padding: 20px 16px 24px; }
+  .facts { grid-template-columns: repeat(2, 1fr); }
+  .sights { grid-template-columns: 1fr; }
+  .plants { grid-template-columns: repeat(3, 1fr); }
+  .timeline ol { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .row2 { grid-template-columns: 1fr; }
+  .nature { grid-template-columns: 1fr; }
+  .memorials { grid-template-columns: 1fr; }
+  .mast svg.arms { width: 60px; }
+}
+</style>
+
+<div class="wrap" lang="ru">
+  <div class="ornament" aria-hidden="true"></div>
+  <article class="spread">
+
+    <!-- ЛЕВАЯ СТРАНИЦА -->
+    <section class="page">
+      <span class="ribbon">Гомельская область · Полесье</span>
+
+      <header class="mast">
+        <!-- Герб: красный испанский щит, серебряный волнистый пояс, стрела с раздвоенным низом и крестом («Сестринец») -->
+        <svg class="arms" viewBox="0 0 100 120" role="img" aria-label="Герб Житковичей">
+          <path class="s-red" d="M6 6h88v60c0 26-20 46-44 48C26 112 6 92 6 66z"/>
+          <path class="s-silver" d="M6 74c8-6 14-6 22 0s14 6 22 0 14-6 22 0 14 6 22 0v14c-8 6-14 6-22 0s-14-6-22 0-14 6-22 0-14-6-22 0z"/>
+          <g class="s-silver">
+            <path d="M50 12l9 13h-6v34l8 9-3 3-8-8-8 8-3-3 8-9V25h-6z"/>
+            <rect x="37" y="34" width="26" height="5"/>
+          </g>
+        </svg>
+        <div>
+          <h1>Житковичи,<br>Беларусь</h1>
+          <div class="be">Жыткавічы · Zhytkavichy · 52°14′ с. ш. 27°52′ в. д.</div>
+        </div>
+      </header>
+
+      <p class="lead">Житковичи — районный центр на юге Гомельской области, в полесском краю озёр и болот у реки Припять. Город вырос <b>вокруг железнодорожной станции 1886 года</b>, а сегодня это промышленный центр района и ворота в Национальный парк «Припятский» и древний Туров.</p>
+
+      <div class="facts">
+        <div class="fact"><div class="n">1500</div><div class="l">первое упоминание поместья «Жидковичи»</div></div>
+        <div class="fact"><div class="n">15 697</div><div class="l">жителей на 1 января 2026 года</div></div>
+        <div class="fact"><div class="n">238 км</div><div class="l">до Гомеля по железной дороге</div></div>
+        <div class="fact"><div class="n">1971</div><div class="l">получен статус города</div></div>
+      </div>
+
+      <h2 class="sec-title">История и достопримечательности</h2>
+
+      <div class="sights">
+        <div class="sight lost">
+          <div class="pic">
+            <svg viewBox="0 0 320 200" aria-hidden="true">
+              <rect class="s-soft" width="320" height="200"/>
+              <rect class="s-reed" y="168" width="320" height="32" opacity=".5"/>
+              <!-- деревянная трёхкупольная церковь -->
+              <g class="s-sand">
+                <rect x="70" y="100" width="60" height="68"/><rect x="130" y="80" width="60" height="88"/><rect x="190" y="100" width="60" height="68"/>
+                <rect x="140" y="52" width="40" height="28"/>
+              </g>
+              <g class="s-ink">
+                <path d="M64 100l36-22 36 22z"/><path d="M184 100l36-22 36 22z"/><path d="M134 52l26-16 26 16z"/>
+                <ellipse cx="100" cy="72" rx="9" ry="11"/><ellipse cx="220" cy="72" rx="9" ry="11"/><ellipse cx="160" cy="28" rx="11" ry="13"/>
+                <rect x="98" y="50" width="4" height="14"/><rect x="94" y="54" width="12" height="3"/>
+                <rect x="218" y="50" width="4" height="14"/><rect x="214" y="54" width="12" height="3"/>
+                <rect x="158" y="2" width="4" height="16"/><rect x="153" y="7" width="14" height="3"/>
+                <rect x="150" y="120" width="20" height="48" rx="10"/>
+              </g>
+              <g class="st-ink" stroke-width="1.5" opacity=".35">
+                <path d="M70 112h60M70 124h60M70 136h60M70 148h60M190 112h60M190 124h60M190 136h60M190 148h60M130 96h60M130 108h20M170 108h20"/>
+              </g>
+            </svg>
+          </div>
+          <h3>Свято-Троицкая церковь <span class="yr">1842</span><span class="tag">утрачена</span></h3>
+          <p>Деревянный храм прихода, известного с 1581 года. Сгорел в 1972 году. На месте сгоревшего храма восстановлена церковь Святой Параскевы Пятницы.</p>
+        </div>
+
+        <div class="sight">
+          <div class="pic">
+            <svg viewBox="0 0 320 200" aria-hidden="true">
+              <rect class="s-soft" width="320" height="200"/>
+              <rect class="s-reed" y="170" width="320" height="30" opacity=".5"/>
+              <!-- водонапорная башня станции -->
+              <rect class="s-red" x="132" y="78" width="56" height="92" opacity=".85"/>
+              <rect class="s-sand" x="118" y="40" width="84" height="40"/>
+              <path class="s-ink" d="M112 40l48-24 48 24z"/>
+              <g class="s-page"><rect x="150" y="100" width="20" height="30" rx="10"/><rect x="132" y="56" width="10" height="14"/><rect x="155" y="56" width="10" height="14"/><rect x="178" y="56" width="10" height="14"/></g>
+              <!-- паровоз -->
+              <g class="s-ink">
+                <rect x="10" y="140" width="80" height="24" rx="3"/><rect x="62" y="122" width="28" height="22"/><rect x="20" y="128" width="10" height="12"/>
+                <circle cx="28" cy="168" r="8"/><circle cx="52" cy="168" r="8"/><circle cx="76" cy="168" r="8"/>
+              </g>
+              <g class="s-muted" opacity=".5"><circle cx="26" cy="116" r="7"/><circle cx="36" cy="104" r="9"/><circle cx="50" cy="92" r="11"/></g>
+              <rect class="s-muted" y="176" width="320" height="3"/>
+              <!-- катальпы -->
+              <g class="s-reed"><circle cx="250" cy="120" r="24"/><circle cx="292" cy="128" r="20"/></g>
+              <g class="s-ink"><rect x="248" y="140" width="4" height="30"/><rect x="290" y="144" width="4" height="26"/></g>
+            </svg>
+          </div>
+          <h3>Станция и водонапорная башня <span class="yr">1886</span></h3>
+          <p>Линия Гомель — Лунинец открыта в сентябре 1886 года. Сохранилась бывшая водонапорная станция для заправки паровозов, рядом растёт аллея катальп.</p>
+        </div>
+
+        <div class="sight">
+          <div class="pic">
+            <svg viewBox="0 0 320 200" aria-hidden="true">
+              <rect class="s-soft" width="320" height="200"/>
+              <rect class="s-reed" y="172" width="320" height="28" opacity=".5"/>
+              <!-- костёл -->
+              <rect x="104" y="80" width="112" height="92" class="s-sand"/>
+              <path class="s-ink" d="M98 82l62-36 62 36z"/>
+              <rect class="s-sand" x="146" y="20" width="28" height="40"/>
+              <path class="s-ink" d="M142 22l18-18 18 18z"/>
+              <rect class="s-ink" x="158" y="-4" width="4" height="12"/><rect class="s-ink" x="154" y="0" width="12" height="3"/>
+              <circle class="s-page" cx="160" cy="98" r="12"/><circle class="st-ink" cx="160" cy="98" r="12" stroke-width="2"/>
+              <path class="s-ink" d="M146 172v-38a14 14 0 0 1 28 0v38z"/>
+              <g class="s-ink" opacity=".75"><rect x="118" y="116" width="12" height="28" rx="6"/><rect x="190" y="116" width="12" height="28" rx="6"/></g>
+              <path class="s-reed" d="M40 172c0-30 14-48 22-48s22 18 22 48z"/><path class="s-reed" d="M236 172c0-26 12-40 20-40s20 14 20 40z"/>
+            </svg>
+          </div>
+          <h3>Костёл Святого Иосифа</h3>
+          <p>Действующий католический храм города. Старый костёл Житковичей утрачен, его история вошла в каталог утраченного наследия Беларуси.</p>
+        </div>
+
+        <div class="sight lost">
+          <div class="pic">
+            <svg viewBox="0 0 320 200" aria-hidden="true">
+              <rect class="s-soft" width="320" height="200"/>
+              <rect class="s-reed" y="168" width="320" height="32" opacity=".5"/>
+              <!-- погранзастава 1920-х -->
+              <rect class="s-sand" x="60" y="104" width="150" height="64"/>
+              <path class="s-ink" d="M50 106l85-40 85 40z"/>
+              <g class="s-page"><rect x="78" y="120" width="18" height="22"/><rect x="112" y="120" width="18" height="22"/><rect x="146" y="120" width="18" height="22"/><rect x="180" y="120" width="18" height="22"/></g>
+              <rect class="s-ink" x="246" y="40" width="5" height="128"/>
+              <rect class="s-red" x="251" y="42" width="40" height="24"/>
+              <g class="st-ink" stroke-width="3"><path d="M10 150h40M10 162h40M20 140v32M40 140v32"/></g>
+            </svg>
+          </div>
+          <h3>18-й Житковичский погранотряд <span class="yr">1921–1941</span></h3>
+          <p>До 1939 года рядом проходила советско-польская граница, в городе стоял штаб пограничного отряда. Памятник Михаилу Дворкину, начальнику контрразведки отряда.</p>
+        </div>
+      </div>
+
+      <h2 class="sec-title">Хроника</h2>
+      <div class="timeline">
+        <ol>
+          <li><b>1500</b>поместье «Жидковичи» в Новогрудском воеводстве ВКЛ</li>
+          <li><b>1581</b>упоминается Троицкая церковь</li>
+          <li><b>1793</b>центр волости в Российской империи</li>
+          <li><b>1886</b>открыта железнодорожная станция</li>
+          <li><b>1924</b>центр Житковичского района</li>
+          <li><b>1941–44</b>оккупация; освобождён 6 июля 1944</li>
+          <li><b>1971</b>получен статус города</li>
+          <li><b>2000</b>герб внесён в Гербовый матрикул</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ПРАВАЯ СТРАНИЦА -->
+    <section class="page">
+      <div class="right-head">
+        <h2>Современные Житковичи: промышленность и природа</h2>
+        <p>Ключевые предприятия города</p>
+      </div>
+
+      <div class="plants">
+        <div class="plant">
+          <svg viewBox="0 0 64 64" aria-hidden="true">
+            <circle class="s-soft" cx="32" cy="32" r="31"/>
+            <g class="s-ink"><rect x="16" y="24" width="28" height="20" rx="2"/><rect x="22" y="16" width="16" height="8"/><rect x="44" y="28" width="6" height="12"/><rect x="10" y="30" width="6" height="8"/></g>
+            <g class="s-red"><rect x="20" y="28" width="4" height="12"/><rect x="28" y="28" width="4" height="12"/><rect x="36" y="28" width="4" height="12"/></g>
+          </svg>
+          <div class="nm">Моторо&shy;строительный завод</div>
+          <div class="ds">двигатели и узлы</div>
+        </div>
+        <div class="plant">
+          <svg viewBox="0 0 64 64" aria-hidden="true">
+            <circle class="s-soft" cx="32" cy="32" r="31"/>
+            <g class="s-sand"><rect x="12" y="38" width="40" height="8" rx="4"/><rect x="16" y="30" width="32" height="8" rx="4"/><rect x="20" y="22" width="24" height="8" rx="4"/></g>
+            <g class="s-ink"><circle cx="13" cy="42" r="3"/><circle cx="17" cy="34" r="3"/><circle cx="21" cy="26" r="3"/></g>
+          </svg>
+          <div class="nm">«Житковичлес»</div>
+          <div class="ds">лесозаготовка и деревообработка</div>
+        </div>
+        <div class="plant">
+          <svg viewBox="0 0 64 64" aria-hidden="true">
+            <circle class="s-soft" cx="32" cy="32" r="31"/>
+            <g class="s-ink"><rect x="14" y="36" width="16" height="9" rx="2"/><rect x="32" y="36" width="16" height="9" rx="2"/><rect x="23" y="26" width="16" height="9" rx="2"/></g>
+            <g class="s-red" opacity=".85"><path d="M30 20c0-6 6-6 4-12 6 4 6 10 2 12z"/></g>
+          </svg>
+          <div class="nm">Торфо&shy;брикетный завод</div>
+          <div class="ds">топливные брикеты из торфа</div>
+        </div>
+        <div class="plant">
+          <svg viewBox="0 0 64 64" aria-hidden="true">
+            <circle class="s-soft" cx="32" cy="32" r="31"/>
+            <g class="s-reed"><path d="M20 40l10-24 10 24z"/><path d="M32 44l10-22 10 22z"/><path d="M12 46l8-18 8 18z"/></g>
+            <g class="s-ink"><rect x="29" y="40" width="3" height="8"/><rect x="41" y="44" width="3" height="6"/><rect x="18" y="46" width="3" height="5"/></g>
+          </svg>
+          <div class="nm">Житковичский лесхоз</div>
+          <div class="ds">лесовосстановление и охрана леса</div>
+        </div>
+        <div class="plant">
+          <svg viewBox="0 0 64 64" aria-hidden="true">
+            <circle class="s-soft" cx="32" cy="32" r="31"/>
+            <g class="s-ink"><rect x="16" y="28" width="22" height="10" rx="2"/><rect x="26" y="18" width="12" height="10"/><circle cx="22" cy="42" r="6"/><circle cx="42" cy="40" r="9"/></g>
+            <g class="s-page"><circle cx="22" cy="42" r="2"/><circle cx="42" cy="40" r="3"/></g>
+            <rect class="s-red" x="38" y="22" width="3" height="10"/>
+          </svg>
+          <div class="nm">«Житковичский агро&shy;техсервис»</div>
+          <div class="ds">сельхозтехника и обслуживание</div>
+        </div>
+      </div>
+
+      <div class="row2">
+        <div class="panel">
+          <svg viewBox="0 0 360 230" role="img" aria-label="Схема окрестностей Житковичей: Припять, Туров, озеро Червоное, Припятский национальный парк, железная дорога">
+            <rect class="s-page" width="360" height="230" rx="4" opacity=".6"/>
+            <!-- парк -->
+            <path class="s-reed" opacity=".25" d="M230 120c30-14 70-10 110 6v90H230c-16-30-22-70 0-96z"/>
+            <text class="t-muted" x="244" y="150" font-size="11">НП «Припятский»</text>
+            <!-- Припять -->
+            <path class="st-water" stroke-width="7" stroke-linecap="round" d="M0 196c40-6 60 10 96 2s46-34 86-28 60 22 96 14 52-10 82-8"/>
+            <text class="t-muted" x="120" y="216" font-size="11" font-style="italic">р. Припять</text>
+            <!-- озеро Червоное -->
+            <ellipse class="s-water" cx="250" cy="58" rx="40" ry="20"/>
+            <text class="t-muted" x="214" y="30" font-size="11">оз. Червоное</text>
+            <!-- водохранилище Млынок -->
+            <ellipse class="s-water" cx="176" cy="150" rx="12" ry="7"/>
+            <text class="t-muted" x="192" y="154" font-size="10">Млынок</text>
+            <!-- железная дорога -->
+            <path class="st-ink" stroke-width="3" d="M0 110h360"/>
+            <path class="st-ink" stroke-width="7" stroke-dasharray="1.5 10" d="M0 110h360"/>
+            <text class="t-muted" x="6" y="100" font-size="10">← Лунинец</text>
+            <text class="t-muted" x="296" y="100" font-size="10">Гомель →</text>
+            <!-- города -->
+            <circle class="s-red" cx="170" cy="110" r="8"/><circle class="s-page" cx="170" cy="110" r="3"/>
+            <text class="t-ink" x="128" y="134" font-size="13" font-weight="700">Житковичи</text>
+            <circle class="s-ink" cx="62" cy="190" r="6"/>
+            <text class="t-ink" x="40" y="176" font-size="12">Туров</text>
+          </svg>
+          <div class="cap">Схема, без масштаба</div>
+        </div>
+
+        <div class="panel">
+          <svg viewBox="0 0 320 150" aria-hidden="true">
+            <rect class="s-page" width="320" height="150" rx="4" opacity=".6"/>
+            <rect class="s-reed" y="118" width="320" height="32" opacity=".45"/>
+            <!-- Су-24М на постаменте -->
+            <rect class="s-muted" x="122" y="78" width="12" height="40"/>
+            <path class="s-ink" d="M60 64l130-4 40-14 10 4-14 16 34 8-34 6 14 16-10 4-40-14-130-4-8-7z"/>
+            <path class="s-ink" d="M150 62l-30-34h10l46 32zM150 74l-30 34h10l46-32z" opacity=".85"/>
+            <!-- обелиск -->
+            <path class="s-ink" d="M266 118V40l8-14 8 14v78z"/>
+            <rect class="s-red" x="262" y="112" width="24" height="8"/>
+            <!-- трактор -->
+            <g class="s-reed"><rect x="20" y="96" width="34" height="14"/><rect x="34" y="84" width="16" height="12"/></g>
+            <g class="s-ink"><circle cx="26" cy="114" r="6"/><circle cx="48" cy="112" r="9"/></g>
+          </svg>
+          <h3>Памятники под открытым небом</h3>
+          <ul class="memorials">
+            <li>Самолёт Су-24М</li>
+            <li>Погибшим в Великой Отечественной войне</li>
+            <li>Трактор Т-74</li>
+            <li>Милицейский ЗАЗ-966</li>
+          </ul>
+          <p>Городские памятники технике — популярное место прогулок. Среди других приметных мест — старая баня и кафе в форме корабля.</p>
+        </div>
+      </div>
+
+      <h2 class="sec-title">Природа и окрестности</h2>
+      <div class="nature">
+        <div class="nat">
+          <h3>Национальный парк «Припятский»</h3>
+          <p>Пойменные дубравы, болота и разливы Припяти. Создан в 1969 году как заповедник; территория парка лежит в Житковичском, Лельчицком и Петриковском районах.</p>
+        </div>
+        <div class="nat">
+          <h3>Озеро Червоное</h3>
+          <p>Одно из крупнейших озёр Беларуси, мелководное и рыбное. Называется так с 1932 года, раньше было известно как Князь-озеро.</p>
+        </div>
+        <div class="nat">
+          <h3>Древний Туров</h3>
+          <p>Второй город района и один из старейших в Беларуси: в летописи упоминается под 980 годом. На Замковой горе стоит памятник Кириллу Туровскому.</p>
+        </div>
+      </div>
+
+      <div class="foot">
+        <span>Источники: Википедия «Житковичи»; radzima.org; calend.ru. Данные на ноябрь 2026 года.</span>
+        <span>
+          <a href="https://ru.wikipedia.org/wiki/%D0%96%D0%B8%D1%82%D0%BA%D0%BE%D0%B2%D0%B8%D1%87%D0%B8" target="_blank" rel="noopener">Википедия</a> ·
+          <a href="https://radzima.org/en/gorad/zhytkavichy.html" target="_blank" rel="noopener">radzima.org</a>
+        </span>
+      </div>
+    </section>
+  </article>
+  <div class="visit">Посетите Житковичи</div>
+  <div class="ornament" aria-hidden="true"></div>
+</div>
